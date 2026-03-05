@@ -25,6 +25,11 @@ class UserController extends Controller
         return $this->userService->GetUsersPaginateService($request);
     }
 
+    public function GetUsersByKasirController()
+    {
+        return $this->userService->GetUsersByKasirService();
+    }
+
     public function GetUserController($username)
     {
         return $this->userService->GetUserService($username);

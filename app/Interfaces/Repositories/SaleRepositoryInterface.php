@@ -5,6 +5,7 @@ namespace App\Interfaces\Repositories;
 interface SaleRepositoryInterface
 {
     public function GetAll();
+    public function GetPaginate($search, $page, $limit);
     public function GetSaleItems($saleCode);
     public function GetOne($saleCode);
     public function Create(array $data);

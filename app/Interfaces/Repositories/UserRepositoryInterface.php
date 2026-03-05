@@ -6,6 +6,7 @@ interface UserRepositoryInterface
 {
     public function GetAll();
     public function GetPaginate($search, $page, $limit);
+    public function GetAllByKasir();
     public function GetOne($username);
     public function Create(array $data);
     public function Update($username, array $data);

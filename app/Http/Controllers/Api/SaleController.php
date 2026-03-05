@@ -20,6 +20,11 @@ class SaleController extends Controller
         return $this->saleService->GetSalesService();
     }
 
+    public function GetSalesPaginateController(Request $request)
+    {
+        return $this->saleService->GetSalesPaginateService($request);
+    }
+
     public function GetSaleController($saleCode)
     {
         return $this->saleService->GetSaleService($saleCode);

@@ -40,6 +40,10 @@ Route::prefix("v1")->group(function () {
                     UserController::class,
                     "GetUsersPaginateController",
                 ])->name("users.all");
+                Route::get("/list-kasir", [
+                    UserController::class,
+                    "GetUsersByKasirController",
+                ])->name("users.list-kasir");
                 Route::get("/{username}", [
                     UserController::class,
                     "GetUserController",
@@ -87,7 +91,7 @@ Route::prefix("v1")->group(function () {
                 Route::get("/list-categories", [
                     CategoryController::class,
                     "GetCategoriesController",
-                ])->name("categories.all");
+                ])->name("categories.list-categories");
                 Route::get("/{categoryName}", [
                     CategoryController::class,
                     "GetCategoryController",
@@ -110,6 +114,10 @@ Route::prefix("v1")->group(function () {
                     ProductController::class,
                     "GetProductsPaginateController",
                 ])->name("products.all");
+                Route::get("/list-products", [
+                    ProductController::class,
+                    "GetProductsController",
+                ])->name("products.list-products");
                 Route::get("/{productCode}", [
                     ProductController::class,
                     "GetProductController",
@@ -130,7 +138,7 @@ Route::prefix("v1")->group(function () {
             Route::prefix("/sales")->group(function () {
                 Route::get("/", [
                     SaleController::class,
-                    "GetSalesController",
+                    "GetSalesPaginateController",
                 ])->name("sales.all");
                 Route::get("/{saleCode}", [
                     SaleController::class,

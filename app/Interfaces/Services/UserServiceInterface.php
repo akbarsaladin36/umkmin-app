@@ -6,6 +6,7 @@ interface UserServiceInterface
 {
     public function GetUsersService();
     public function GetUsersPaginateService($request);
+    public function GetUsersByKasirService();
     public function GetUserService($username);
     public function CreateUserService($request);
     public function UpdateUserService($username, $request);

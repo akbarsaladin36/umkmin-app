@@ -66,8 +66,8 @@ const AdminSidebar = () => {
                             </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to="/admin/sales"
                                 className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-danger group"
                                 data-drawer-hide="top-bar-sidebar"
                             >
@@ -75,7 +75,7 @@ const AdminSidebar = () => {
                                 <span className="flex-1 ms-3 whitespace-nowrap">
                                     Sales
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <a
