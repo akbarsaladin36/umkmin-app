@@ -15,6 +15,7 @@ import Products from "../pages/admin/Products";
 import Sales from "../pages/admin/Sales";
 import Suppliers from "../pages/admin/Suppliers";
 import Purchases from "../pages/admin/Purchases";
+import CashTransactions from "../pages/admin/CashTransactions";
 
 const App = () => {
     const location = useLocation();
@@ -46,6 +47,10 @@ const App = () => {
                         <Route path="sales" element={<Sales />} />
                         <Route path="suppliers" element={<Suppliers />} />
                         <Route path="purchases" element={<Purchases />} />
+                        <Route
+                            path="cash-transactions"
+                            element={<CashTransactions />}
+                        />
                     </Route>
                 </Route>
             </Route>

@@ -228,7 +228,7 @@ Route::prefix("v1")->group(function () {
             Route::prefix("/cash-transactions")->group(function () {
                 Route::get("/", [
                     CashTransactionController::class,
-                    "GetCashTransactionsController",
+                    "GetCashTransactionsPaginateController",
                 ])->name("cash-transactions.all");
                 Route::get("/{cashTransactionCode}", [
                     CashTransactionController::class,

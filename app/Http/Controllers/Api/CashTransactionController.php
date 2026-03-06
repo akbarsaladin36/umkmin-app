@@ -10,8 +10,9 @@ class CashTransactionController extends Controller
 {
     protected $cashTransactionService;
 
-    public function __construct(CashTransactionServiceInterface $cashTransactionService)
-    {
+    public function __construct(
+        CashTransactionServiceInterface $cashTransactionService,
+    ) {
         $this->cashTransactionService = $cashTransactionService;
     }
 
@@ -20,23 +21,41 @@ class CashTransactionController extends Controller
         return $this->cashTransactionService->GetCashTransactionsService();
     }
 
+    public function GetCashTransactionsPaginateController(Request $request)
+    {
+        return $this->cashTransactionService->GetCashTransactionsPaginateService(
+            $request,
+        );
+    }
+
     public function GetCashTransactionController($cashTransactionCode)
     {
-        return $this->cashTransactionService->GetCashTransactionService($cashTransactionCode);
+        return $this->cashTransactionService->GetCashTransactionService(
+            $cashTransactionCode,
+        );
     }
 
     public function CreateCashTransactionController(Request $request)
     {
-        return $this->cashTransactionService->CreateCashTransactionService($request);
+        return $this->cashTransactionService->CreateCashTransactionService(
+            $request,
+        );
     }
 
-    public function UpdateCashTransactionController($cashTransactionCode, Request $request)
-    {
-        return $this->cashTransactionService->UpdateCashTransactionService($cashTransactionCode, $request);
+    public function UpdateCashTransactionController(
+        $cashTransactionCode,
+        Request $request,
+    ) {
+        return $this->cashTransactionService->UpdateCashTransactionService(
+            $cashTransactionCode,
+            $request,
+        );
     }
 
     public function DeleteCashTransactionController($cashTransactionCode)
     {
-        return $this->cashTransactionService->DeleteCashTransactionService($cashTransactionCode);
+        return $this->cashTransactionService->DeleteCashTransactionService(
+            $cashTransactionCode,
+        );
     }
 }

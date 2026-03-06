@@ -139,7 +139,7 @@ class PurchaseService implements PurchaseServiceInterface
                 DB::commit();
                 $response = [...$data, "purchase_items" => $purchase_items];
                 return Helper::GetResponse(
-                    400,
+                    200,
                     "A new purchase data is succesfully created!",
                     $response,
                 );

@@ -9,14 +9,24 @@ import { BsTrash3 } from "react-icons/bs";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import toast from "react-hot-toast";
 
+const formatDate = (date = new Date()) => {
+    const d = new Date(date);
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const year = d.getFullYear();
+
+    return `${year}-${month}-${day}`;
+};
+
 const Purchases = () => {
     const [createPurchaseForm, setCreatePurchaseForm] = useState({
         supplier_uuid: "",
-        due_date: new Date(Date.now()),
+        due_date: formatDate(),
     });
     const [selectedProduct, setSelectedProduct] = useState("");
     const [items, setItems] = useState([]);
     const [editPurchaseForm, setEditPurchaseForm] = useState({
+        paid_amount: "",
         status: "",
     });
     const [deletePurchaseCode, setDeletePurchaseCode] = useState(null);
@@ -105,7 +115,7 @@ const Purchases = () => {
     const resetForm = () => {
         setCreatePurchaseForm({
             supplier_uuid: "",
-            due_date: new Date(Date.now()),
+            due_date: formatDate(),
         });
         setItems([]);
     };
@@ -115,16 +125,17 @@ const Purchases = () => {
         const data = {
             supplier_uuid: createPurchaseForm.supplier_uuid,
             due_date: createPurchaseForm.due_date,
+            purchase_items: items,
         };
         await CreatePurchase(data);
         createPurchaseModalRef.current.hide();
         resetForm();
     };
 
-    const showEditModal = async (saleCode) => {
+    const showEditModal = async (purchaseCode) => {
         editPurchaseModalRef.current.show();
-        await GetPurchase(saleCode);
-        await GetPurchaseItemsByCode(saleCode);
+        await GetPurchase(purchaseCode);
+        await GetPurchaseItemsByCode(purchaseCode);
     };
 
     const handleEditChange = (e) => {
@@ -141,6 +152,7 @@ const Purchases = () => {
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         const data = {
+            paid_amount: totalSubtotal,
             status: editPurchaseForm.status,
         };
         await UpdatePurchase(purchaseDetail.code, data);
@@ -302,15 +314,62 @@ const Purchases = () => {
                                             <option value="0">
                                                 Pilih Supplier
                                             </option>
-                                            {suppliers.map((supplier) => (
-                                                <option
-                                                    value={supplier.uuid}
-                                                    key={supplier.uuid}
-                                                >
-                                                    {supplier.name}
-                                                </option>
-                                            ))}
+                                            {suppliers.map(
+                                                (supplier, index) => (
+                                                    <option
+                                                        value={supplier.uuid}
+                                                        key={index}
+                                                    >
+                                                        {supplier.name}
+                                                    </option>
+                                                ),
+                                            )}
                                         </select>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label
+                                            htmlFor="due_date"
+                                            className="block mb-2.5 text-sm font-medium text-heading"
+                                        >
+                                            Pilih Tanggal
+                                        </label>
+                                        <div className="relative max-w-sm">
+                                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                <svg
+                                                    className="w-4 h-4 text-body"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24"
+                                                    height="24"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke="currentColor"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <input
+                                                id="datepicker-autohide"
+                                                datepicker="true"
+                                                datepicker-autohide="true"
+                                                datepicker-buttons="true"
+                                                datepicker-autoselect-today="true"
+                                                datepicker-format="yyyy-mm-dd"
+                                                name="due_date"
+                                                onChange={handleChange}
+                                                value={
+                                                    createPurchaseForm.due_date
+                                                }
+                                                type="text"
+                                                className="block w-full ps-9 pe-3 py-2\.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body"
+                                                placeholder="Select date"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="mt-3 flex items-center max-w-sm mx-auto space-x-2">
@@ -528,6 +587,24 @@ const Purchases = () => {
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="mb-3">
+                                <label
+                                    htmlFor="cost_price"
+                                    className="block mb-2.5 text-sm font-medium text-heading"
+                                >
+                                    Paid Amount
+                                </label>
+                                <input
+                                    type="text"
+                                    id="paid_amount"
+                                    name="paid_amount"
+                                    onChange={handleEditChange}
+                                    value={totalSubtotal}
+                                    className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                    placeholder="150000"
+                                    required
+                                />
                             </div>
                             <div className="mt-3">
                                 <p className="mb-3 text-center font-bold">
