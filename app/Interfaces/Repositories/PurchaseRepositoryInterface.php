@@ -5,6 +5,7 @@ namespace App\Interfaces\Repositories;
 interface PurchaseRepositoryInterface
 {
     public function GetAll();
+    public function GetPaginate($search, $page, $limit);
     public function GetPurchaseItemsByPurchaseCode($purchaseCode);
     public function GetOne($purchaseCode);
     public function Create(array $data);

@@ -9,55 +9,100 @@ class PurchaseRepository implements PurchaseRepositoryInterface
 {
     public function GetAll()
     {
-        $purchases = DB::table('purchases')->get();
+        $purchases = DB::table("purchases")->get();
         return $purchases;
+    }
+
+    public function GetPaginate($search, $page, $limit)
+    {
+        $query = DB::table("purchases");
+        if ($search) {
+            $query->where(function ($a) use ($search) {
+                $a->where("code", "like", "%" . $search . "%")->orWhere(
+                    "invoice_no",
+                    "like",
+                    "%" . $search . "%",
+                );
+            });
+        }
+        $total = (clone $query)->count();
+        $purchases = $query
+            ->orderBy("created_at", "desc")
+            ->offset(($page - 1) * $limit)
+            ->limit($limit)
+            ->get();
+        $last_page = ceil($total / $limit);
+        $from = ($page - 1) * $limit + 1;
+        $to = min($page * $limit, $total);
+        $pagination = [
+            "data" => $purchases,
+            "total" => $total,
+            "per_page" => $limit,
+            "current_page" => $page,
+            "last_page" => $last_page,
+            "from" => $from,
+            "to" => $to,
+        ];
+        return $pagination;
     }
 
     public function GetPurchaseItemsByPurchaseCode($purchaseCode)
     {
-        $purchaseItems = DB::table('purchase_items')->where('purchase_code', $purchaseCode)->get();
+        $purchaseItems = DB::table("purchase_items")
+            ->where("purchase_code", $purchaseCode)
+            ->get();
         return $purchaseItems;
     }
 
     public function GetOne($purchaseCode)
     {
-        $purchase = DB::table('purchases')->where('code', $purchaseCode)->first();
+        $purchase = DB::table("purchases")
+            ->where("code", $purchaseCode)
+            ->first();
         return $purchase;
     }
 
     public function Create(array $data)
     {
-        $purchase = DB::table('purchases')->insert($data);
+        $purchase = DB::table("purchases")->insert($data);
         return $purchase;
     }
 
     public function CreatePurchaseItem(array $data)
     {
-        $purchaseItem = DB::table('purchase_items')->insert($data);
+        $purchaseItem = DB::table("purchase_items")->insert($data);
         return $purchaseItem;
     }
 
     public function Update($purchaseCode, array $data)
     {
-        $purchase = DB::table('purchases')->where('code', $purchaseCode)->update($data);
+        $purchase = DB::table("purchases")
+            ->where("code", $purchaseCode)
+            ->update($data);
         return $purchase;
     }
 
     public function UpdateProduct($productCode, $qty)
     {
-        $product = DB::table('products')->where('code', $productCode)->increment('stock', $qty);
+        $product = DB::table("products")
+            ->where("code", $productCode)
+            ->increment("stock", $qty);
         return $product;
     }
 
     public function Delete($purchaseCode)
     {
-        $purchase = DB::table('purchases')->where('code', $purchaseCode)->delete();
+        $purchase = DB::table("purchases")
+            ->where("code", $purchaseCode)
+            ->delete();
         return $purchase;
     }
 
     public function DeletePurchaseItem($purchaseCode)
     {
-        $purchaseItem = DB::table('purchase_items')->where('purchase_code', $purchaseCode)->delete();
+        $purchaseItem = DB::table("purchase_items")
+            ->where("purchase_code", $purchaseCode)
+            ->delete();
         return $purchaseItem;
     }
 }

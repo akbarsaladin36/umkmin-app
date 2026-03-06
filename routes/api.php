@@ -170,8 +170,12 @@ Route::prefix("v1")->group(function () {
             Route::prefix("/suppliers")->group(function () {
                 Route::get("/", [
                     SupplierController::class,
-                    "GetSuppliersController",
+                    "GetSuppliersPaginateController",
                 ])->name("suppliers.all");
+                Route::get("/list-suppliers", [
+                    SupplierController::class,
+                    "GetSuppliersController",
+                ])->name("suppliers.list-suppliers");
                 Route::get("/{supplierCode}", [
                     SupplierController::class,
                     "GetSupplierController",
@@ -192,7 +196,7 @@ Route::prefix("v1")->group(function () {
             Route::prefix("/purchases")->group(function () {
                 Route::get("/", [
                     PurchaseController::class,
-                    "GetPurchasesController",
+                    "GetPurchasesPaginateController",
                 ])->name("purchases.all");
                 Route::get("/{purchaseCode}", [
                     PurchaseController::class,

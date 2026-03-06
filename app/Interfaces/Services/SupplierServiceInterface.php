@@ -5,6 +5,7 @@ namespace App\Interfaces\Services;
 interface SupplierServiceInterface
 {
     public function GetSuppliersService();
+    public function GetSuppliersPaginateService($request);
     public function GetSupplierService($supplierCode);
     public function CreateSupplierService($request);
     public function UpdateSupplierService($supplierCode, $request);

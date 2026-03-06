@@ -20,12 +20,46 @@ class SupplierService implements SupplierServiceInterface
     {
         try {
             $suppliers = $this->supplierRepository->GetAll();
-            if(count($suppliers) > 0) {
-                return Helper::GetResponse(200, 'All suppliers are succesfully appeared!', $suppliers);
+            if (count($suppliers) > 0) {
+                return Helper::GetResponse(
+                    200,
+                    "All suppliers are succesfully appeared!",
+                    $suppliers,
+                );
             } else {
-                return Helper::GetResponse(400, 'All suppliers are empty!');
+                return Helper::GetResponse(400, "All suppliers are empty!");
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
+            return Helper::GetResponse(500, $e->getMessage());
+        }
+    }
+
+    public function GetSuppliersPaginateService($request)
+    {
+        try {
+            $search = $request->search ? $request->search : null;
+            $page = $request->page ? $request->page : 1;
+            $limit = $request->limit ? $request->limit : 5;
+            $page = max((int) $page, 1);
+            $limit = max((int) $limit, 1);
+            $sales = $this->supplierRepository->GetPaginate(
+                $search,
+                $page,
+                $limit,
+            );
+            if ($sales["total"] > 0) {
+                return Helper::GetResponse(
+                    200,
+                    "All suppliers data are succesfully appeared!",
+                    $sales,
+                );
+            } else {
+                return Helper::GetResponse(
+                    400,
+                    "All suppliers data are empty!",
+                );
+            }
+        } catch (Throwable $e) {
             return Helper::GetResponse(500, $e->getMessage());
         }
     }
@@ -34,12 +68,19 @@ class SupplierService implements SupplierServiceInterface
     {
         try {
             $supplier = $this->supplierRepository->GetOne($supplierCode);
-            if($supplier) {
-                return Helper::GetResponse(200, 'A supplier data is succesfully appeared!', $supplier);
+            if ($supplier) {
+                return Helper::GetResponse(
+                    200,
+                    "A supplier data is succesfully appeared!",
+                    $supplier,
+                );
             } else {
-                return Helper::GetResponse(400, 'A supplier data is not found!');
+                return Helper::GetResponse(
+                    400,
+                    "A supplier data is not found!",
+                );
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::GetResponse(500, $e->getMessage());
         }
     }
@@ -47,25 +88,32 @@ class SupplierService implements SupplierServiceInterface
     public function CreateSupplierService($request)
     {
         try {
-            $supplierCode = Helper::GenerateCode('suppliers');
+            $supplierCode = Helper::GenerateCode("suppliers");
             $supplier = $this->supplierRepository->GetOne($supplierCode);
-            if($supplier) {
-                return Helper::GetResponse(400, 'A supplier data is registered!');
+            if ($supplier) {
+                return Helper::GetResponse(
+                    400,
+                    "A supplier data is registered!",
+                );
             } else {
                 $authUser = Helper::GetAuthUser($request);
                 $data = [
-                    'code' => $supplierCode,
-                    'name' => $request->name,
-                    'phone_number' => $request->phone_number,
-                    'address' => $request->address,
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'created_by' => $authUser->uuid,
-                    'created_by_username' => $authUser->username
+                    "code" => $supplierCode,
+                    "name" => $request->name,
+                    "phone_number" => $request->phone_number,
+                    "address" => $request->address,
+                    "created_at" => date("Y-m-d H:i:s"),
+                    "created_by" => $authUser->uuid,
+                    "created_by_username" => $authUser->username,
                 ];
                 $this->supplierRepository->Create($data);
-                return Helper::GetResponse(200, 'A new supplier data is succesfully created!', $data);
+                return Helper::GetResponse(
+                    200,
+                    "A new supplier data is succesfully created!",
+                    $data,
+                );
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::GetResponse(500, $e->getMessage());
         }
     }
@@ -74,22 +122,33 @@ class SupplierService implements SupplierServiceInterface
     {
         try {
             $supplier = $this->supplierRepository->GetOne($supplierCode);
-            if($supplier) {
+            if ($supplier) {
                 $authUser = Helper::GetAuthUser($request);
                 $data = [
-                    'name' => $request->name ? $request->name : $supplier->name,
-                    'phone_number' => $request->phone_number  ? $request->phone_number : $supplier->phone_number,
-                    'address' => $request->address  ? $request->address : $supplier->address,
-                    'updated_at' => date("Y-m-d H:i:s"),
-                    'updated_by' => $authUser->uuid,
-                    'updated_by_username' => $authUser->username
+                    "name" => $request->name ? $request->name : $supplier->name,
+                    "phone_number" => $request->phone_number
+                        ? $request->phone_number
+                        : $supplier->phone_number,
+                    "address" => $request->address
+                        ? $request->address
+                        : $supplier->address,
+                    "updated_at" => date("Y-m-d H:i:s"),
+                    "updated_by" => $authUser->uuid,
+                    "updated_by_username" => $authUser->username,
                 ];
                 $this->supplierRepository->Update($supplierCode, $data);
-                return Helper::GetResponse(200, 'An existing supplier data is succesfully updated!', $data);
+                return Helper::GetResponse(
+                    200,
+                    "An existing supplier data is succesfully updated!",
+                    $data,
+                );
             } else {
-                return Helper::GetResponse(400, 'A supplier data is not found!');
+                return Helper::GetResponse(
+                    400,
+                    "A supplier data is not found!",
+                );
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::GetResponse(500, $e->getMessage());
         }
     }
@@ -98,13 +157,19 @@ class SupplierService implements SupplierServiceInterface
     {
         try {
             $supplier = $this->supplierRepository->GetOne($supplierCode);
-            if($supplier) {
+            if ($supplier) {
                 $this->supplierRepository->Delete($supplierCode);
-                return Helper::GetResponse(200, 'A supplier data is succesfully deleted!');
+                return Helper::GetResponse(
+                    200,
+                    "A supplier data is succesfully deleted!",
+                );
             } else {
-                return Helper::GetResponse(400, 'A supplier data is not found!');
+                return Helper::GetResponse(
+                    400,
+                    "A supplier data is not found!",
+                );
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::GetResponse(500, $e->getMessage());
         }
     }

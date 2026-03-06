@@ -20,6 +20,11 @@ class PurchaseController extends Controller
         return $this->purchaseService->GetPurchasesService();
     }
 
+    public function GetPurchasesPaginateController(Request $request)
+    {
+        return $this->purchaseService->GetPurchasesPaginateService($request);
+    }
+
     public function GetPurchaseController($purchaseCode)
     {
         return $this->purchaseService->GetPurchaseService($purchaseCode);
@@ -32,7 +37,10 @@ class PurchaseController extends Controller
 
     public function UpdatePurchaseController($purchaseCode, Request $request)
     {
-        return $this->purchaseService->UpdatePurchaseService($purchaseCode, $request);
+        return $this->purchaseService->UpdatePurchaseService(
+            $purchaseCode,
+            $request,
+        );
     }
 
     public function DeletePurchaseController($purchaseCode)

@@ -42,7 +42,7 @@ const useSalesStore = create((set, get) => ({
         } catch (error) {
             console.log(error);
             set({
-                products: [],
+                sales: [],
                 pagination: {},
                 page: page,
                 search: search,

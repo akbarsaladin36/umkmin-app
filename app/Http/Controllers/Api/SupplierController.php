@@ -20,6 +20,11 @@ class SupplierController extends Controller
         return $this->supplierService->GetSuppliersService();
     }
 
+    public function GetSuppliersPaginateController(Request $request)
+    {
+        return $this->supplierService->GetSuppliersPaginateService($request);
+    }
+
     public function GetSupplierController($supplierCode)
     {
         return $this->supplierService->GetSupplierService($supplierCode);
@@ -32,7 +37,10 @@ class SupplierController extends Controller
 
     public function UpdateSupplierController($supplierCode, Request $request)
     {
-        return $this->supplierService->UpdateSupplierService($supplierCode, $request);
+        return $this->supplierService->UpdateSupplierService(
+            $supplierCode,
+            $request,
+        );
     }
 
     public function DeleteSupplierController($supplierCode)
