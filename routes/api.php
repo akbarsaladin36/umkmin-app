@@ -249,4 +249,69 @@ Route::prefix("v1")->group(function () {
             });
         });
     });
+
+    Route::middleware(["auth.user", "role:2"])->group(function () {
+        Route::prefix("/cashier")->group(function () {
+            Route::prefix("/products")->group(function () {
+                Route::get("/list-products", [
+                    ProductController::class,
+                    "GetProductsController",
+                ])->name("products.list-products");
+            });
+            Route::prefix("/sales")->group(function () {
+                Route::get("/", [
+                    SaleController::class,
+                    "GetSalesPaginateByUserController",
+                ])->name("sales.all");
+                Route::get("/{saleCode}", [
+                    SaleController::class,
+                    "GetSaleController",
+                ])->name("sales.show");
+                Route::post("/", [
+                    SaleController::class,
+                    "CreateSaleController",
+                ])->name("sales.create");
+                Route::patch("/{saleCode}", [
+                    SaleController::class,
+                    "UpdateSaleController",
+                ])->name("sales.update");
+                Route::delete("/{saleCode}", [
+                    SaleController::class,
+                    "DeleteSaleController",
+                ])->name("sales.delete");
+            });
+            Route::prefix("/sale-items")->group(function () {
+                Route::get("/{saleCode}", [
+                    SaleItemController::class,
+                    "GetSaleItemsBySaleCodeController",
+                ])->name("sale-items.all");
+                Route::delete("/{saleItemCode}", [
+                    SaleItemController::class,
+                    "DeleteSaleItemController",
+                ])->name("sale-items.delete");
+            });
+            Route::prefix("/cash-transactions")->group(function () {
+                Route::get("/", [
+                    CashTransactionController::class,
+                    "GetCashTransactionsPaginateByUserController",
+                ])->name("cash-transactions.my-cash-transactions");
+                Route::get("/{cashTransactionCode}", [
+                    CashTransactionController::class,
+                    "GetCashTransactionController",
+                ])->name("cash-transactions.show");
+                Route::post("/", [
+                    CashTransactionController::class,
+                    "CreateCashTransactionController",
+                ])->name("cash-transactions.create");
+                Route::patch("/{cashTransactionCode}", [
+                    CashTransactionController::class,
+                    "UpdateCashTransactionController",
+                ])->name("cash-transactions.update");
+                Route::delete("/{cashTransactionCode}", [
+                    CashTransactionController::class,
+                    "DeleteCashTransactionController",
+                ])->name("cash-transactions.delete");
+            });
+        });
+    });
 });

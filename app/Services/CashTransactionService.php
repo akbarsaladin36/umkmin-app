@@ -68,6 +68,38 @@ class CashTransactionService implements CashTransactionServiceInterface
         }
     }
 
+    public function GetCashTransactionsPaginateByUserService($request)
+    {
+        try {
+            $authUser = Helper::GetAuthUser($request);
+            $search = $request->search ? $request->search : null;
+            $page = $request->page ? $request->page : 1;
+            $limit = $request->limit ? $request->limit : 5;
+            $page = max((int) $page, 1);
+            $limit = max((int) $limit, 1);
+            $cashTransactions = $this->cashTransactionRepository->GetPaginateByUser(
+                $authUser->username,
+                $search,
+                $page,
+                $limit,
+            );
+            if ($cashTransactions["total"] > 0) {
+                return Helper::GetResponse(
+                    200,
+                    "All cash transactions by user data are succesfully appeared!",
+                    $cashTransactions,
+                );
+            } else {
+                return Helper::GetResponse(
+                    400,
+                    "All cash transactions by user data are empty!",
+                );
+            }
+        } catch (Throwable $e) {
+            return Helper::GetResponse(500, $e->getMessage());
+        }
+    }
+
     public function GetCashTransactionService($cashTransactionCode)
     {
         try {

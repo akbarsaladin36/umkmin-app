@@ -58,6 +58,35 @@ class SaleService implements SaleServiceInterface
         }
     }
 
+    public function GetSalesPaginateByUserService($request)
+    {
+        try {
+            $authUser = Helper::GetAuthUser($request);
+            $search = $request->search ? $request->search : null;
+            $page = $request->page ? $request->page : 1;
+            $limit = $request->limit ? $request->limit : 5;
+            $page = max((int) $page, 1);
+            $limit = max((int) $limit, 1);
+            $sales = $this->saleRepository->GetPaginateByUser(
+                $authUser->username,
+                $search,
+                $page,
+                $limit,
+            );
+            if ($sales["total"] > 0) {
+                return Helper::GetResponse(
+                    200,
+                    "All sales data are succesfully appeared!",
+                    $sales,
+                );
+            } else {
+                return Helper::GetResponse(400, "All sales data are empty!");
+            }
+        } catch (Throwable $e) {
+            return Helper::GetResponse(500, $e->getMessage());
+        }
+    }
+
     public function GetSaleService($saleCode)
     {
         try {

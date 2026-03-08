@@ -28,6 +28,14 @@ class CashTransactionController extends Controller
         );
     }
 
+    public function GetCashTransactionsPaginateByUserController(
+        Request $request,
+    ) {
+        return $this->cashTransactionService->GetCashTransactionsPaginateByUserService(
+            $request,
+        );
+    }
+
     public function GetCashTransactionController($cashTransactionCode)
     {
         return $this->cashTransactionService->GetCashTransactionService(

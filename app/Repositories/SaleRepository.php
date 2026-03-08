@@ -46,6 +46,39 @@ class SaleRepository implements SaleRepositoryInterface
         return $pagination;
     }
 
+    public function GetPaginateByUser($username, $search, $page, $limit)
+    {
+        $query = DB::table("sales")->where("created_by_username", $username);
+        if ($search) {
+            $query->where(function ($a) use ($search) {
+                $a->where("code", "like", "%" . $search . "%")->orWhere(
+                    "invoice_no",
+                    "like",
+                    "%" . $search . "%",
+                );
+            });
+        }
+        $total = (clone $query)->count();
+        $sales = $query
+            ->orderBy("created_at", "desc")
+            ->offset(($page - 1) * $limit)
+            ->limit($limit)
+            ->get();
+        $last_page = ceil($total / $limit);
+        $from = ($page - 1) * $limit + 1;
+        $to = min($page * $limit, $total);
+        $pagination = [
+            "data" => $sales,
+            "total" => $total,
+            "per_page" => $limit,
+            "current_page" => $page,
+            "last_page" => $last_page,
+            "from" => $from,
+            "to" => $to,
+        ];
+        return $pagination;
+    }
+
     public function GetSaleItems($saleCode)
     {
         $saleItems = DB::table("sale_items")

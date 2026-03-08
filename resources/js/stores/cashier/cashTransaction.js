@@ -1,0 +1,108 @@
+import { create } from "zustand";
+import axiosApi from "../../utils/axios";
+import toast from "react-hot-toast";
+
+const useCashierCashTransactionsStore = create((set, get) => ({
+    cashTransactions: [],
+    pagination: {},
+    search: "",
+    page: 1,
+    limit: 5,
+    cashTransactionDetail: null,
+    loading: false,
+    GetCashTransactions: async (username, page = 1, search = get().search) => {
+        set({ loading: true });
+        try {
+            const params = {
+                username,
+                page,
+                search,
+                limit: get().limit,
+            };
+            const res = await axiosApi.get("/cashier/cash-transactions", {
+                params,
+            });
+            const start = (page - 1) * get().limit;
+            const cashTransactions = res.data.data.data.map((item, index) => {
+                return {
+                    no: start + index + 1,
+                    code: item.code,
+                    category: item.category,
+                    amount: item.amount,
+                    description: item.description,
+                    status: item.status,
+                };
+            });
+            set({
+                cashTransactions: cashTransactions,
+                pagination: res.data.data,
+                page: page,
+                search: search,
+                loading: false,
+            });
+        } catch (error) {
+            console.log(error);
+            set({
+                cashTransactions: [],
+                pagination: {},
+                page: page,
+                search: search,
+                loading: false,
+            });
+        }
+    },
+    GetCashTransaction: async (cashTransactionCode) => {
+        set({ loading: true });
+        try {
+            const res = await axiosApi.get(
+                `/cashier/cash-transactions/${cashTransactionCode}`,
+            );
+            set({ cashTransactionDetail: res.data.data, loading: false });
+        } catch (error) {
+            toast.error(error.response.data.message);
+            set({ cashTransactionDetail: null, loading: false });
+        }
+    },
+    CreateCashTransaction: async (data) => {
+        set({ loading: true });
+        try {
+            const res = await axiosApi.post("/cashier/cash-transactions", data);
+            toast.success(res.data.message);
+            get().GetCashTransactions();
+            set({ loading: false });
+        } catch (error) {
+            toast.error(error.response.data.message);
+            set({ loading: false });
+        }
+    },
+    UpdateCashTransaction: async (cashTransactionCode, data) => {
+        set({ loading: true });
+        try {
+            const res = await axiosApi.patch(
+                `/cashier/cash-transactions/${cashTransactionCode}`,
+                data,
+            );
+            toast.success(res.data.message);
+            get().GetCashTransactions();
+            set({ loading: false });
+        } catch (error) {
+            toast.error(error.response.data.message);
+            set({ loading: false });
+        }
+    },
+    DeleteCashTransaction: async (cashTransactionCode) => {
+        try {
+            const res = await axiosApi.delete(
+                `/cashier/cash-transactions/${cashTransactionCode}`,
+            );
+            toast.success(res.data.message);
+            get().GetCashTransactions();
+            set({ loading: false });
+        } catch (error) {
+            toast.error(error.response.data.message);
+            set({ loading: false });
+        }
+    },
+}));
+
+export default useCashierCashTransactionsStore;
