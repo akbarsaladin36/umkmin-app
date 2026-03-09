@@ -196,6 +196,17 @@ const Users = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {users.length === 0 && (
+                            <tr className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
+                                <td
+                                    colSpan="6"
+                                    className="text-center px-6 py-4"
+                                >
+                                    Belum ada data user yang ditampilkan
+                                </td>
+                            </tr>
+                        )}
+
                         {users.map((user) => (
                             <tr
                                 className="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium"

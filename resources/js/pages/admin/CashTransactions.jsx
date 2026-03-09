@@ -179,6 +179,18 @@ const CashTransactions = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {cashTransactions.length === 0 && (
+                            <tr className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
+                                <td
+                                    colSpan="6"
+                                    className="text-center px-6 py-4"
+                                >
+                                    Belum ada data transaksi kas yang
+                                    ditampilkan
+                                </td>
+                            </tr>
+                        )}
+
                         {cashTransactions.map((cashTransaction) => (
                             <tr
                                 className="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium"

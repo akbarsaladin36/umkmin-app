@@ -162,6 +162,17 @@ const Categories = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {categories.length === 0 && (
+                            <tr className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
+                                <td
+                                    colSpan="6"
+                                    className="text-center px-6 py-4"
+                                >
+                                    Belum ada data kategori yang ditampilkan
+                                </td>
+                            </tr>
+                        )}
+
                         {categories.map((category) => (
                             <tr
                                 className="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium"
