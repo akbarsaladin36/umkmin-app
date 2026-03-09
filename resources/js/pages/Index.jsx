@@ -11,8 +11,8 @@ const Index = () => {
     });
     const login = useAuthStore((state) => state.login);
     const loading = useAuthStore((state) => state.loading);
-    const user = useAuthStore((state) => state.user);
-    const authChecked = useAuthStore((state) => state.authChecked);
+    // const user = useAuthStore((state) => state.user);
+    // const authChecked = useAuthStore((state) => state.authChecked);
 
     const handleChange = (e) => {
         setLoginForm({
@@ -27,25 +27,25 @@ const Index = () => {
             username: loginForm.username,
             password: loginForm.password,
         };
-        const user = await login(data);
+        const res = await login(data);
         // console.log(user.role_id);
-        if (user.role_id === 1) {
+        if (res.role_id === 1) {
             navigate("/admin/dashboard", { replace: true });
         } else {
             navigate("/cashier/sales", { replace: true });
         }
     };
 
-    useEffect(() => {
-        if (!authChecked) return;
-        if (user) {
-            if (user.role_id === 1) {
-                navigate("/admin/dashboard", { replace: true });
-            } else {
-                navigate("/cashier/sales", { replace: true });
-            }
-        }
-    }, [user, authChecked]);
+    // useEffect(() => {
+    //     if (!authChecked) return;
+    //     if (user) {
+    //         if (user.role_id === 1) {
+    //             navigate("/admin/dashboard", { replace: true });
+    //         } else {
+    //             navigate("/cashier/sales", { replace: true });
+    //         }
+    //     }
+    // }, [user, authChecked]);
 
     return (
         <div className="bg-gray-300 min-h-screen flex items-center justify-center">
