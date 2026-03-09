@@ -18,7 +18,7 @@ const useAuthStore = create((set) => ({
             return res.data.data;
         } catch (error) {
             console.log(error);
-            set({ user: null, loading: false, authChecked: false });
+            set({ user: null, loading: false, authChecked: true });
         }
     },
     logout: async () => {
