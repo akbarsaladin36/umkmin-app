@@ -1,9 +1,9 @@
 import axios from "axios";
 
-console.log("CEK URL API : ", import.meta.env.VITE_API_BASE_URL);
+// console.log("CEK URL API : ", import.meta.env.VITE_API_BASE_URL);
 
 const axiosApi = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "/api/v1",
+    baseURL: "/api/v1",
     withCredentials: true,
 });
 
