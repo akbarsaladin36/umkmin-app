@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
     // console.log("Protected User", user);
 
     if (!authChecked) {
-        return <div>Loading...</div>;
+        return null;
     }
 
     if (!user) {

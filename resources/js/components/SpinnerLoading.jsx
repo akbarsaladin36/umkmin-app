@@ -1,7 +1,14 @@
-const Loading = () => {
+const Loading = ({ fullScreen = false }) => {
     return (
         <>
-            <div role="status" className="flex justify-center">
+            <div
+                role="status"
+                className={
+                    fullScreen
+                        ? "flex items-center justify-center min-h-screen"
+                        : "flex justify-center"
+                }
+            >
                 <svg
                     aria-hidden="true"
                     className="w-8 h-8 text-neutral-tertiary animate-spin fill-brand"
