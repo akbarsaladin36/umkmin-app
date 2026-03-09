@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../stores/auth";
 import Loading from "../components/SpinnerLoading";
@@ -11,6 +11,7 @@ const Index = () => {
     });
     const login = useAuthStore((state) => state.login);
     const loading = useAuthStore((state) => state.loading);
+    const user = useAuthStore((state) => state.user);
 
     const handleChange = (e) => {
         setLoginForm({
@@ -26,13 +27,22 @@ const Index = () => {
             password: loginForm.password,
         };
         const user = await login(data);
-        console.log(user.role_id);
+        // console.log(user.role_id);
         if (user.role_id == "1") {
             navigate("/admin/dashboard");
         } else {
             navigate("/cashier/sales");
         }
     };
+
+    useEffect(() => {
+        if (!user) return;
+        if (user.role_id == "1") {
+            navigate("/admin/dashboard");
+        } else {
+            navigate("/cashier/sales");
+        }
+    }, [user]);
 
     return (
         <div className="bg-gray-300 min-h-screen flex items-center justify-center">
