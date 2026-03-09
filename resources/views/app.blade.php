@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Laravel React</title>
-    @if (app()->environment('local'))
-        @viteReactRefresh
-    @endif
+    @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 </head>
 <body>
