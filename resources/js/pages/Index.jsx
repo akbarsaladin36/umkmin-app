@@ -28,7 +28,7 @@ const Index = () => {
             password: loginForm.password,
         };
         const res = await login(data);
-        // console.log(user.role_id);
+        console.log(res);
         if (res.role_id === 1) {
             navigate("/admin/dashboard", { replace: true });
         } else {

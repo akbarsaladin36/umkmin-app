@@ -4,14 +4,15 @@ import useAuthStore from "../stores/auth";
 const ProtectedRoute = () => {
     const user = useAuthStore((state) => state.user);
     const authChecked = useAuthStore((state) => state.authChecked);
+    console.log("Protected User", user);
 
     if (!authChecked) {
         return <div>Loading...</div>;
     }
 
-    if (!user) {
-        return <Navigate to="/" replace />;
-    }
+    // if (!user) {
+    //     return <Navigate to="/" replace />;
+    // }
 
     return <Outlet />;
 };
