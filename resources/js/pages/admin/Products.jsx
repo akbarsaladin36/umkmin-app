@@ -201,6 +201,16 @@ const Products = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {products.length === 0 && (
+                            <tr className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
+                                <td
+                                    colSpan="6"
+                                    className="text-center px-6 py-4"
+                                >
+                                    Belum ada data produk yang ditampilkan
+                                </td>
+                            </tr>
+                        )}
                         {products.map((product) => (
                             <tr
                                 className="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium"
